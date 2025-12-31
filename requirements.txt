@@ -1,4 +1,6 @@
 fastapi
 uvicorn
 sqlalchemy
-libsql-experimental
+sqlalchemy-libsql
+libsql-client
+python-dotenv
