@@ -3,3 +3,4 @@ uvicorn
 sqlalchemy>=2.0.0
 libsql
 sqlalchemy-libsql
+pydantic
