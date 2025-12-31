@@ -12,7 +12,7 @@ if not TURSO_DB_URL or not TURSO_DB_TOKEN:
 # 2. Format the URL for SQLAlchemy
 # SQLAlchemy expects: sqlite+libsql://your-db-url.turso.io?authToken=your-token
 # We strip 'libsql://' or 'https://' from the start if the user copied it directly.
-clean_url = TURSO_DB_URL.replace("libsql://", "").replace("https://", "")
+clean_url = TURSO_DB_URL.replace("libsql://", "").replace("https://", "").rstrip("/")
 connection_string = f"sqlite+libsql://{clean_url}?authToken={TURSO_DB_TOKEN}"
 
 # 3. Create the Engine
@@ -33,5 +33,6 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 
