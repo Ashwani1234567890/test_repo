@@ -14,7 +14,7 @@ if not TURSO_DB_URL or not TURSO_DB_TOKEN:
 # IMPORTANT: Python 3.13 requires the 'sqlalchemy-libsql' dialect package 
 # to handle the 'sqlite+libsql://' prefix correctly.
 # We also ensure the mandatory '/' before the '?' to avoid 308 Redirects.
-clean_url = TURSO_DB_URL.replace("libsql://", "").replace("https://", "").rstrip("/")
+clean_url = TURSO_DB_URL.replace("libsql://", "").replace("https://", "")
 connection_string = f"sqlite+libsql://{clean_url}/?authToken={TURSO_DB_TOKEN}"
 
 # 3. Create the SQLAlchemy Engine
@@ -36,3 +36,4 @@ def get_db():
         yield db
     finally:
         db.close()
+
