@@ -1,6 +1,6 @@
 fastapi
 uvicorn
 sqlalchemy
-libsql
+libsql-experimental
 sqlalchemy-libsql
 pydantic
