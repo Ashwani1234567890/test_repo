@@ -4,3 +4,4 @@ sqlalchemy
 sqlalchemy-libsql
 libsql-client
 python-dotenv
+libsql-experimental
