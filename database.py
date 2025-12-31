@@ -4,8 +4,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # 1. Get Environment Variables
-TURSO_DB_URL = os.environ.get("TURSO_DATABASE_URL")
-TURSO_DB_TOKEN = os.environ.get("TURSO_AUTH_TOKEN")
+TURSO_DB_URL = os.environ.get("libsql://testdb-yashu-05.aws-ap-south-1.turso.io")
+TURSO_DB_TOKEN = os.environ.get("eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NjcxNjc5NzksImlkIjoiOTNlNTA5Y2QtOWExMi00MDgyLTkzMDEtM2Y3M2U3ZjE4YzJiIiwicmlkIjoiMDA5Njc4NWYtY2EyMC00NDJmLWJiNzAtMGY1M2M2OTAzYjg4In0.044Var6bmTeuYEIaj5TUAcMkS0kBQLwdRbip6DW8AwsX34la-v_w2xKvJsyyYSZ0I6SqCL8im8re9UioAFGhBQ")
 
 if not TURSO_DB_URL or not TURSO_DB_TOKEN:
     raise ValueError("TURSO_DATABASE_URL and TURSO_AUTH_TOKEN must be set in environment variables.")
@@ -34,6 +34,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 
 
