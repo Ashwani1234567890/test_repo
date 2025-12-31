@@ -1,7 +1,11 @@
 import os
 from sqlalchemy import create_engine
+from dotenv import load_dotenv
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from libsql_client import create_client
+
+load_dotenv()
 
 # 1. Get Environment Variables
 TURSO_DB_URL = os.environ.get("libsql://testdb-yashu-05.aws-ap-south-1.turso.io")
@@ -9,6 +13,9 @@ TURSO_DB_TOKEN = os.environ.get("eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicn
 
 if not TURSO_DB_URL or not TURSO_DB_TOKEN:
     raise ValueError("TURSO_DATABASE_URL and TURSO_AUTH_TOKEN must be set in environment variables.")
+
+def get_db_client():
+    return create_client(url=URL, auth_token=TOKEN)
 
 # 2. Format the URL for SQLAlchemy
 # SQLAlchemy expects: sqlite+libsql://your-db-url.turso.io?authToken=your-token
@@ -34,6 +41,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 
 
