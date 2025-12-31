@@ -1,32 +1,29 @@
 import os
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base
 
-# Try to load dotenv for local development
+# Load .env only if running locally
 try:
     from dotenv import load_dotenv
     load_dotenv()
 except ImportError:
     pass
 
-# CORRECT: Pass the KEY name, not the value itself
-TURSO_DB_URL = os.environ.get("libsql://testdb-yashu-05.aws-ap-south-1.turso.io")
-TURSO_DB_TOKEN = os.environ.get("eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NjcxNjc5NzksImlkIjoiOTNlNTA5Y2QtOWExMi00MDgyLTkzMDEtM2Y3M2U3ZjE4YzJiIiwicmlkIjoiMDA5Njc4NWYtY2EyMC00NDJmLWJiNzAtMGY1M2M2OTAzYjg4In0.044Var6bmTeuYEIaj5TUAcMkS0kBQLwdRbip6DW8AwsX34la-v_w2xKvJsyyYSZ0I6SqCL8im8re9UioAFGhBQ")
+# We fetch by the KEY name
+URL = os.environ.get("libsql://testdb-yashu-05.aws-ap-south-1.turso.io")
+TOKEN = os.environ.get("eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NjcxNjc5NzksImlkIjoiOTNlNTA5Y2QtOWExMi00MDgyLTkzMDEtM2Y3M2U3ZjE4YzJiIiwicmlkIjoiMDA5Njc4NWYtY2EyMC00NDJmLWJiNzAtMGY1M2M2OTAzYjg4In0.044Var6bmTeuYEIaj5TUAcMkS0kBQLwdRbip6DW8AwsX34la-v_w2xKvJsyyYSZ0I6SqCL8im8re9UioAFGhBQ")
 
-if not TURSO_DB_URL or not TURSO_DB_TOKEN:
-    raise ValueError("TURSO_DATABASE_URL and TURSO_AUTH_TOKEN must be set in environment variables.")
+# Debugging: This helps you see if the variables are actually loaded
+if not URL or not TOKEN:
+    print(f"DEBUG: URL found? {bool(URL)}")
+    print(f"DEBUG: Token found? {bool(TOKEN)}")
+    raise ValueError("TURSO_DATABASE_URL and TURSO_AUTH_TOKEN must be set in Render Environment Variables.")
 
-# Format for SQLAlchemy
-# Remove 'libsql://' and prepend 'sqlite+libsql://'
-clean_url = TURSO_DB_URL.replace("libsql://", "").replace("https://", "")
-connection_string = f"sqlite+libsql://{clean_url}?authToken={TURSO_DB_TOKEN}"
+# SQLAlchemy formatting for Turso
+clean_url = URL.replace("libsql://", "").replace("https://", "")
+connection_string = f"sqlite+libsql://{clean_url}?authToken={TOKEN}"
 
-engine = create_engine(
-    connection_string, 
-    connect_args={"check_same_thread": False}
-)
-
+engine = create_engine(connection_string, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
@@ -36,8 +33,3 @@ def get_db():
         yield db
     finally:
         db.close()
-
-
-
-
-
