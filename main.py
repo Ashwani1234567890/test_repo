@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 
 app=FastAPI()
-model.Base.metadata.create_all(bind=engine)
+#model.Base.metadata.create_all(bind=engine)
 
 
 app.add_middleware(
@@ -97,5 +97,6 @@ def update_pharma(data:pharmacyupdate,phar_id:int,db:Session=Depends(get_db)):
     db.commit()
     db.refresh(pharmaupd)
     
+
 
 
