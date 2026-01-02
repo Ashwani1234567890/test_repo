@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 
 app=FastAPI()
-#model.Base.metadata.create_all(bind=engine)
+model.Base.metadata.create_all(bind=engine)
 
 
 app.add_middleware(
@@ -67,7 +67,7 @@ def create_pharma(phar:pharmacycreate,db:Session=Depends(get_db)):
         'id': db_phar.id
     }
 
-@app.delete('/pharmacy/{id}')
+@app.delete('/pharmacy/{phar_id}')
 def delete_pharma(phar_id:int,db:Session=Depends(get_db)):
     pharma=db.query(Pharmacy).filter(Pharmacy.id==phar_id).first()
     if not pharma:
@@ -78,7 +78,7 @@ def delete_pharma(phar_id:int,db:Session=Depends(get_db)):
     return {'message':'ID deleted'}
 
 @app.put('/update/{phar_id}')
-def update_pharma(data:pharmacyupdate,phar_id=int,db:Session=Depends(get_db)):
+def update_pharma(data:pharmacyupdate,phar_id:int,db:Session=Depends(get_db)):
     pharmaupd=db.query(Pharmacy).filter(Pharmacy.id==phar_id).first()
     if not  pharmaupd:
         raise HTTPException(status_code=404,detail='Does not exist')
@@ -91,7 +91,11 @@ def update_pharma(data:pharmacyupdate,phar_id=int,db:Session=Depends(get_db)):
     if data.longitude is not None:
         pharmaupd.longitude=data.longitude
 
+    return {'message':'Updated Succesfully',
+            'ID':pharmaupd}
+
     db.commit()
     db.refresh(pharmaupd)
     
+
 
